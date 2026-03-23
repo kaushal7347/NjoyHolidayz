@@ -1,9 +1,6 @@
 package com.user_service.controller;
 
-import com.user_service.dto.ForgotPasswordRequest;
-import com.user_service.dto.LoginRequest;
-import com.user_service.dto.RegisterRequest;
-import com.user_service.dto.ResetPasswordRequest;
+import com.user_service.dto.*;
 import com.user_service.service.AuthService;
 import com.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +24,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
 
-        String token = authService.login(request);
+        AuthResponse response = authService.login(request);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/forgot-password")

@@ -1,13 +1,12 @@
 package com.user_service.service;
 
-import com.user_service.dto.ForgotPasswordRequest;
-import com.user_service.dto.LoginRequest;
-import com.user_service.dto.ResetPasswordRequest;
+import com.user_service.dto.*;
 import com.user_service.entity.User;
 import com.user_service.repository.UserRepository;
 import com.user_service.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public String login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
 
         String username = request.getUsername();
         User user = userRepository
@@ -32,10 +31,19 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new BadCredentialsException("Invalid username or password");
         }
 
-        return jwtUtil.generateToken(user);
+        String token = jwtUtil.generateToken(user);
+
+        AuthResponse response = new AuthResponse(
+                token,
+                "Bearer",
+                86400000L,
+                new UserResponse(user.getUserId(), user.getName(), user.getEmail(), user.getRole(), user.getActive())
+        );
+
+        return response;
     }
 
     public void forgotPassword(ForgotPasswordRequest request) {

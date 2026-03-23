@@ -131,9 +131,8 @@ public class UserService {
         res.setId(user.getUserId());
         res.setName(user.getName());
         res.setEmail(user.getEmail());
-        res.setPhone(user.getPhone());
         res.setActive(user.getActive());
-        res.setRole(String.valueOf(user.getRole()));
+        res.setRole(user.getRole());
         return res;
     }
 

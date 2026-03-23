@@ -29,7 +29,7 @@ public class DayNight {
     private String flightPrice;
 
     private String hotelName;
-    private String typeOfName;
+    private String roomType;
     private String noOfRooms;
     private String pax;
     private String hotelPrice;
